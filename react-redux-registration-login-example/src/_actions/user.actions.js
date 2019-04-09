@@ -3,6 +3,10 @@ import { userService } from '../_services';
 import { alertActions } from './';
 import { history } from '../_helpers';
 
+
+// these are the action creators the constants are the action types
+// it seems like these action creators are defined here already wrapped with dispatch so mapdispatchprops will not be used
+// actions call the user service calls
 export const userActions = {
     login,
     logout,
@@ -17,7 +21,7 @@ function login(username, password) {
 
         userService.login(username, password)
             .then(
-                user => { 
+                user => {
                     dispatch(success(user));
                     history.push('/');
                 },
@@ -44,7 +48,7 @@ function register(user) {
 
         userService.register(user)
             .then(
-                user => { 
+                user => {
                     dispatch(success());
                     history.push('/login');
                     dispatch(alertActions.success('Registration successful'));

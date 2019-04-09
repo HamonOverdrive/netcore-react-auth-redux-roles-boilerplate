@@ -47,9 +47,10 @@ namespace WebApi.Controllers
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new Claim[] 
+                Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, user.Id.ToString())
+                    new Claim(ClaimTypes.Name, user.Id.ToString()),
+                    new Claim(ClaimTypes.Role, user.Role)
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -58,12 +59,14 @@ namespace WebApi.Controllers
             var tokenString = tokenHandler.WriteToken(token);
 
             // return basic user info (without password) and token to store client side
+            // unsure if i should give the Role = user.Role to send that info to client. is it secure?
             return Ok(new {
                 Id = user.Id,
                 Username = user.Username,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                Token = tokenString
+                Token = tokenString,
+                Role = user.Role
             });
         }
 
@@ -74,12 +77,12 @@ namespace WebApi.Controllers
             // map dto to entity
             var user = _mapper.Map<User>(userDto);
 
-            try 
+            try
             {
-                // save 
+                // save
                 _userService.Create(user, userDto.Password);
                 return Ok();
-            } 
+            }
             catch(AppException ex)
             {
                 // return error message if there was an exception
@@ -87,6 +90,7 @@ namespace WebApi.Controllers
             }
         }
 
+        [Authorize(Roles = Role.Admin)]
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -110,12 +114,12 @@ namespace WebApi.Controllers
             var user = _mapper.Map<User>(userDto);
             user.Id = id;
 
-            try 
+            try
             {
-                // save 
+                // save
                 _userService.Update(user, userDto.Password);
                 return Ok();
-            } 
+            }
             catch(AppException ex)
             {
                 // return error message if there was an exception
