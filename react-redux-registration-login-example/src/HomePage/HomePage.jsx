@@ -47,6 +47,7 @@ class HomePage extends React.Component {
 function mapStateToProps(state) {
     const { users, authentication } = state;
     const { user } = authentication;
+    // user is the current user logged in which is from the localstore in the reducer
     return {
         user,
         users

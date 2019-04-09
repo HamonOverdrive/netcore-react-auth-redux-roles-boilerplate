@@ -1,6 +1,8 @@
 import config from 'config';
 import { authHeader } from '../_helpers';
 
+// const currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('user')));
+
 export const userService = {
     login,
     logout,
@@ -8,7 +10,11 @@ export const userService = {
     getAll,
     getById,
     update,
-    delete: _delete
+    delete: _delete,
+
+    // possible make call to this...
+    // currentUser: currentUserSubject.asObservable(),
+    // get currentUserValue () { return currentUserSubject.value }
 };
 
 function login(username, password) {
