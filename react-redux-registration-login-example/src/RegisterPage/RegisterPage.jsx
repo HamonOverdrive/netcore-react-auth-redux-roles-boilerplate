@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 
 import { userActions } from '../_actions';
 
-import { Role } from '../_helpers'
 
 class RegisterPage extends React.Component {
     constructor(props) {
@@ -15,8 +14,7 @@ class RegisterPage extends React.Component {
                 firstName: '',
                 lastName: '',
                 username: '',
-                password: '',
-                role: Role.User
+                password: ''
             },
             submitted: false
         };
